@@ -20,17 +20,21 @@ export function Modal({ open, onClose, children, className = "" }: Props) {
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
+  // 패딩은 안쪽 div에 둔다. dialog 자체에 두면 패딩 영역 클릭이 배경 클릭으로 잡혀 모달이 닫힌다
   return (
     <dialog
       ref={ref}
       onClose={onClose}
       onClick={(e) => e.target === e.currentTarget && onClose()}
-      className={`m-auto w-[calc(100%-40px)] max-w-[335px] bg-paper p-5 pt-6 text-ink shadow-note backdrop:bg-black/60 ${className}`}
+      className={`bg-note m-auto w-[calc(100%-40px)] max-w-[335px] p-0 text-ink backdrop:bg-black/50 ${className}`}
     >
-      <button type="button" onClick={onClose} className="absolute top-2.5 right-2.5 p-1" aria-label="닫기">
-        <CloseIcon size={24} />
-      </button>
-      {children}
+      <div className="relative px-5 pt-[34px] pb-10">
+        <button type="button" onClick={onClose} className="absolute top-2.5 right-2.5" aria-label="닫기">
+          {/* eslint-disable-next-line @next/next/no-img-element -- 24px 정적 SVG 아이콘 */}
+          <img src="/images/ui/icon-close-24.svg" width={24} height={24} alt="" />
+        </button>
+        {children}
+      </div>
     </dialog>
   );
 }

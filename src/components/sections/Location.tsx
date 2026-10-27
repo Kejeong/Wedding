@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/Button";
+import Image from "next/image";
+import mapImage from "../../../public/images/location-map.webp";
 import { SectionTitle } from "@/components/SectionTitle";
 import { useToast } from "@/components/Toast";
 import { venue } from "@/data/wedding";
@@ -17,10 +19,12 @@ export function Location() {
     <section className="mt-30 px-5">
       <SectionTitle title="LOCATION" subtitle="예식 장소" />
 
-      {/* TODO: 피그마 약도(node 327:696)를 SVG로 export 해서 public/images/map.svg 로 교체 */}
-      <div className="mt-10 flex aspect-[337/262] items-center justify-center border border-line text-sm text-muted">
-        약도
-      </div>
+      <Image
+        src={mapImage}
+        alt="약도: 건대입구역(2·7호선) 옆 스타시티 웨딩홀, 건국대학교 병원과 롯데백화점 인근"
+        className="mt-10 h-auto w-full"
+        sizes="335px"
+      />
 
       <div className="mt-10 text-center text-base leading-normal">
         <p className="font-semibold">{venue.name}</p>

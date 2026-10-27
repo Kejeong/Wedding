@@ -9,7 +9,7 @@ import { createEntrySchema, passwordSchema, type GuestbookEntry, type GuestbookP
 
 const PREVIEW_COUNT = 3;
 const inputClass =
-  "w-full border border-line bg-white px-[17px] py-[13px] text-sm leading-normal placeholder:text-faint aria-invalid:border-red-400 focus:border-ink focus:outline-none";
+  "block w-full border border-line bg-transparent px-4 py-3 text-sm leading-normal text-ink placeholder:text-muted focus:border-ink focus:outline-none aria-invalid:border-danger";
 
 type ModalState = { type: "write" } | { type: "all" } | { type: "delete"; entry: GuestbookEntry } | null;
 
@@ -38,13 +38,36 @@ function Note({ entry, clamp, onDelete }: { entry: GuestbookEntry; clamp: boolea
 
 function WriteForm({ onDone }: { onDone: (entry: GuestbookEntry) => void }) {
   const [form, setForm] = useState({ name: "", message: "", password: "" });
-  const [error, setError] = useState<string | null>(null);
+  const [touched, setTouched] = useState({ name: false, message: false, password: false });
+  const [serverError, setServerError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const filled = form.name.trim() && form.message.trim() && form.password.length > 0;
+
+  // 피그마 '기입오류': 입력을 마친(blur) 칸이 규칙에 안 맞으면 테두리를 빨갛게 하고 안내 문구를 띄운다
+  const invalid = {
+    name: touched.name && !form.name.trim(),
+    message: touched.message && !form.message.trim(),
+    password: touched.password && !passwordSchema.safeParse(form.password).success,
+  };
+  const hasInvalid = invalid.name || invalid.message || invalid.password;
+  const error = serverError ?? (hasInvalid ? "정보를 올바르게 입력해주세요" : null);
+  const valid = createEntrySchema.safeParse(form).success;
+
+  function field(key: keyof typeof form) {
+    return {
+      value: form[key],
+      "aria-invalid": invalid[key] || !!serverError,
+      onBlur: () => setTouched((t) => ({ ...t, [key]: true })),
+    };
+  }
+
+  function update(key: keyof typeof form, value: string) {
+    setServerError(null);
+    setForm((f) => ({ ...f, [key]: value }));
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!createEntrySchema.safeParse(form).success) return setError("정보를 올바르게 입력해주세요");
+    if (!valid) return;
 
     setSubmitting(true);
     const res = await fetch("/api/guestbook", {
@@ -54,40 +77,44 @@ function WriteForm({ onDone }: { onDone: (entry: GuestbookEntry) => void }) {
     }).catch(() => null);
     setSubmitting(false);
 
-    if (!res?.ok) return setError((await res?.json().catch(() => null))?.error ?? "잠시 후 다시 시도해주세요");
+    if (!res?.ok) return setServerError((await res?.json().catch(() => null))?.error ?? "잠시 후 다시 시도해주세요");
     onDone(await res.json());
   }
 
   return (
-    <form onSubmit={submit} className="mt-10 space-y-2.5 px-5" noValidate>
-      <input
-        className={inputClass}
-        placeholder="이름을 입력해 주세요"
-        maxLength={20}
-        value={form.name}
-        aria-invalid={!!error}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-      />
-      <textarea
-        className={`${inputClass} h-[150px] resize-none`}
-        placeholder="축하의 말을 남겨 주세요"
-        maxLength={500}
-        value={form.message}
-        aria-invalid={!!error}
-        onChange={(e) => setForm({ ...form, message: e.target.value })}
-      />
-      <input
-        className={inputClass}
-        placeholder="비밀번호를 입력해 주세요 (숫자 4자리)"
-        type="password"
-        inputMode="numeric"
-        maxLength={4}
-        value={form.password}
-        aria-invalid={!!error}
-        onChange={(e) => setForm({ ...form, password: e.target.value.replace(/\D/g, "") })}
-      />
-      <p className="h-[18px] text-xs leading-normal text-red-500">{error}</p>
-      <Button type="submit" variant="solid" disabled={!filled || submitting}>
+    <form onSubmit={submit} className="mt-10" noValidate>
+      <div className="space-y-2.5">
+        <input
+          className={inputClass}
+          placeholder="이름을 입력해 주세요"
+          aria-label="이름"
+          maxLength={20}
+          {...field("name")}
+          onChange={(e) => update("name", e.target.value)}
+        />
+        <textarea
+          className={`${inputClass} h-[150px] resize-none`}
+          placeholder="축하의 말을 남겨 주세요"
+          aria-label="축하 메시지"
+          maxLength={500}
+          {...field("message")}
+          onChange={(e) => update("message", e.target.value)}
+        />
+        <input
+          className={inputClass}
+          placeholder="비밀번호를 입력해 주세요 (숫자 4자리)"
+          aria-label="비밀번호 (숫자 4자리)"
+          type="password"
+          inputMode="numeric"
+          maxLength={4}
+          {...field("password")}
+          onChange={(e) => update("password", e.target.value.replace(/\D/g, ""))}
+        />
+      </div>
+      <p role="alert" className="mt-1.5 h-[18px] text-xs leading-normal text-danger">
+        {error}
+      </p>
+      <Button type="submit" variant="solid" className="mt-4" disabled={!valid || submitting}>
         작성 완료
       </Button>
     </form>
@@ -116,7 +143,7 @@ function DeleteForm({ entry, onDone }: { entry: GuestbookEntry; onDone: () => vo
   }
 
   return (
-    <form onSubmit={submit} className="px-5 pb-5" noValidate>
+    <form onSubmit={submit} noValidate>
       <header className="text-center">
         <h2 className="text-base leading-normal font-semibold">방명록 삭제</h2>
         <p className="mt-1.5 text-sm leading-normal text-body">비밀번호를 입력하세요</p>
@@ -132,7 +159,7 @@ function DeleteForm({ entry, onDone }: { entry: GuestbookEntry; onDone: () => vo
         aria-invalid={!!error}
         onChange={(e) => setPassword(e.target.value.replace(/\D/g, ""))}
       />
-      <p className="mt-1.5 h-[18px] text-xs leading-normal text-red-500">{error}</p>
+      <p className="mt-1.5 h-[18px] text-xs leading-normal text-danger">{error}</p>
       <Button type="submit" variant="solid" className="mt-1.5" disabled={password.length !== 4 || submitting}>
         삭제하기
       </Button>
@@ -161,7 +188,8 @@ export function Guestbook() {
 
   const subtitle = (
     <header className="text-center">
-      <h2 className="text-[30px] leading-none">
+      {/* 글꼴이 섞이면 줄 높이가 늘어나서 높이를 피그마 값(30px)으로 고정 */}
+      <h2 className="h-[30px] text-[30px] leading-none">
         <span className="font-script">M</span>
         <span className="font-display">ESSAGE</span>
       </h2>
@@ -204,7 +232,7 @@ export function Guestbook() {
 
       <Modal open={modal?.type === "all"} onClose={close}>
         {subtitle}
-        <ul className="mt-10 max-h-[60dvh] space-y-2.5 overflow-y-auto px-5 pb-5">
+        <ul className="mt-10 max-h-[60dvh] space-y-2.5 overflow-y-auto">
           {all?.map((entry) => (
             <Note key={entry.id} entry={entry} clamp={false} onDelete={() => setModal({ type: "delete", entry })} />
           ))}

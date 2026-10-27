@@ -5,7 +5,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "outline" | "
 export function Button({ variant = "outline", className = "", ...props }: Props) {
   const styles =
     variant === "solid"
-      ? "bg-ink text-white disabled:bg-faint"
+      ? "bg-ink text-white disabled:bg-muted"
       : "border border-line bg-white text-ink";
 
   return (

@@ -23,7 +23,7 @@ Next.js (App Router) + TypeScript + Tailwind CSS v4 · Vercel 배포 · 방명�
 
 ## 남은 작업
 
-- [ ] 이미지 에셋 (`public/images/`: paper.jpg 배경, og.jpg 1200x630, 갤러리 사진)
+- [ ] 이미지 에셋 (`public/images/`: og.jpg 1200x630, 갤러리 사진)
 - [ ] 메인 봉투·초대 봉투 일러스트, 약도 SVG
 - [ ] 갤러리 콜라주 레이아웃
 - [ ] Adobe Fonts kit 연결 (IvyOra Display, Altesse Std)

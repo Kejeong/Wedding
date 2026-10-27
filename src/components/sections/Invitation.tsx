@@ -1,6 +1,6 @@
-import { couple } from "@/data/wedding";
+import { couple, greeting } from "@/data/wedding";
 
-// TODO: 봉투 일러스트 (피그마 node 349:3), 인사말 확정 문구
+// TODO: 봉투 일러스트 (피그마 node 349:3)
 export function Invitation() {
   const { groom, bride } = couple;
 
@@ -11,24 +11,23 @@ export function Invitation() {
         <br />
         INVITED!
       </div>
-      <p className="mt-10 text-base leading-normal whitespace-pre-line">
-        {"인사말이 들어갈 자리입니다.\n피그마 텍스트 확정 후 교체해 주세요."}
-      </p>
-      <dl className="mt-10 space-y-1 text-base leading-normal">
-        <div>
-          <dt className="inline">
-            {groom.father} · {groom.mother}
-          </dt>
-          <span className="text-muted"> 의 {groom.relation} </span>
-          <dd className="inline font-semibold">{groom.name}</dd>
-        </div>
-        <div>
-          <dt className="inline">
-            {bride.father} · {bride.mother}
-          </dt>
-          <span className="text-muted"> 의 {bride.relation} </span>
-          <dd className="inline font-semibold">{bride.name}</dd>
-        </div>
+      <div className="mt-10 space-y-3 text-base leading-normal">
+        {greeting.map((paragraph) => (
+          <p key={paragraph} className="whitespace-pre-line">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+      <dl className="mt-14 text-base leading-normal">
+        {[groom, bride].map((person) => (
+          <div key={person.name}>
+            <dt className="inline">
+              {person.father} · {person.mother}
+            </dt>
+            <span className="text-sm text-muted"> 의 {person.relation} </span>
+            <dd className="inline">{person.name}</dd>
+          </div>
+        ))}
       </dl>
     </section>
   );

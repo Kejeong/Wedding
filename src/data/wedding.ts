@@ -5,6 +5,13 @@ export const couple = {
   bride: { en: "EUNHYE", name: "김은혜", father: "김종우", mother: "박진희", relation: "장녀" },
 } as const;
 
+// 문단 단위 배열, 문단 안의 줄바꿈은 \n
+export const greeting = [
+  "서로를 마주하며 걸어온 5년의 시간,\n그 모든 계절이 오늘을 향해 있었습니다.",
+  "추운 겨울 끝에 다가오는 봄처럼\n따스한 온기로 피어나는 저희의 시작을\n가장 아끼는 분들과 함께 나누고 싶습니다.",
+  "그 소중한 시작의 자리에 함께하시어\n따뜻하게 빛내주시면 감사하겠습니다.",
+] as const;
+
 export const ceremony = {
   // KST 기준. 시간은 확정되면 수정
   date: new Date("2027-02-20T12:00:00+09:00"),
@@ -15,7 +22,8 @@ export const ceremony = {
 export const venue = {
   name: "건대 스타시티 웨딩홀",
   address: "서울 광진구 능동로 110 스타시티영존 5F",
-  kakaoMapUrl: "https://map.kakao.com/link/search/건대 스타시티 웨딩홀",
+  // 검색 대신 좌표로 열어서 다른 웨딩홀이 잡히지 않게 한다 (카카오 주소 검색: 능동로 110 스타시티영존빌딩)
+  kakaoMapUrl: "https://map.kakao.com/link/map/건대 스타시티 웨딩홀,37.540658,127.071412",
   transport: [
     {
       title: "주차",
