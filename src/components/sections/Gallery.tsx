@@ -1,22 +1,18 @@
+import { GalleryStack } from "@/components/GalleryStack";
+import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
+import { gallery } from "@/data/wedding";
 
-// TODO: 사진을 public/images/gallery/ 에 넣고 next/image 로 피그마 콜라주(약 25장) 배치
-const PLACEHOLDERS = Array.from({ length: 6 }, (_, i) => i);
+// 사진이 아직 없을 때 보여줄 자리표시 장수 (피그마 카운터 01 / 30 기준)
+const PLACEHOLDER_COUNT = 30;
 
 export function Gallery() {
   return (
     <section className="mt-30">
       <SectionTitle title="GALLERY" />
-      <p className="mt-2.5 px-5 text-center font-display text-xs leading-tight text-muted">
-        Thank you for celebrating with us. Our day begins right here.
-      </p>
-      <div className="mt-10 grid grid-cols-2 gap-2.5 px-5">
-        {PLACEHOLDERS.map((i) => (
-          <div key={i} className="flex aspect-[2/3] items-center justify-center bg-line text-xs text-muted">
-            사진 {i + 1}
-          </div>
-        ))}
-      </div>
+      <Reveal delay={0.32} className="mt-[60px]">
+        <GalleryStack photos={gallery} placeholderCount={PLACEHOLDER_COUNT} />
+      </Reveal>
     </section>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 import { useToast } from "@/components/Toast";
 import { accounts, type Account } from "@/data/wedding";
@@ -14,14 +15,14 @@ function AccountGroup({ title, items }: { title: string; items: Account[] }) {
   }
 
   return (
-    <div>
+    <Reveal>
       <h3 className="text-base leading-normal font-semibold">{title}</h3>
-      <ul className="mt-5 divide-y divide-line-light bg-white px-5 shadow-card">
+      <ul className="bg-card mt-5 divide-y divide-line-light px-5 shadow-card">
         {items.map((account) => (
           <li key={account.number} className="flex items-end justify-between py-5">
             <div>
-              <p className="text-xs leading-normal text-muted">{account.label}</p>
-              <p className="mt-1 text-base leading-normal">
+              <p className="text-sm leading-normal text-muted">{account.label}</p>
+              <p className="mt-1.5 text-base leading-normal">
                 {account.bank} {account.number}
               </p>
             </div>
@@ -31,7 +32,7 @@ function AccountGroup({ title, items }: { title: string; items: Account[] }) {
           </li>
         ))}
       </ul>
-    </div>
+    </Reveal>
   );
 }
 

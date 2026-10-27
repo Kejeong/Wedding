@@ -16,8 +16,6 @@
   --font-display: "ivyora-display", var(--font-cormorant), Georgia, serif;
   --font-script: "altesse-std-24pt", var(--font-pinyon), cursive;
 
-  --tracking-tight-2: -0.02em;
-
   --shadow-note: 0 2px 4px rgb(0 0 0 / 0.16);
   --shadow-card: 2px 2px 6px rgb(0 0 0 / 0.1);
 }
@@ -27,7 +25,22 @@ html {
 }
 
 body {
-  @apply font-sans text-ink tracking-tight-2 antialiased;
+  @apply font-sans text-ink antialiased;
+}
+
+/* 피그마 자간 -2%: em은 상속 시 px로 굳어버리므로 요소마다 지정해야 글자 크기별로 -2%가 된다.
+   Tailwind preflight가 폼 요소에 letter-spacing: inherit 를 걸어서 폼 요소도 같은 명시도로 다시 덮는다 */
+@layer base {
+  *,
+  ::before,
+  ::after,
+  ::placeholder,
+  button,
+  input,
+  select,
+  textarea {
+    letter-spacing: -0.02em;
+  }
 }
 
 /* 종이 질감 배경: public/images/paper.webp 하나를 세로로 반복 (피그마는 375x667 타일) */
@@ -44,4 +57,80 @@ body {
     linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)),
     url("/images/ui/bg-note.webp") center / cover,
     #ffffff;
+}
+
+/* 등장 애니메이션 (Reveal 컴포넌트). 참고: 14px 이동 + 페이드, 0.95s ease-out */
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.95s ease-out,
+    transform 0.95s ease-out;
+}
+.reveal[data-from="up"] {
+  transform: translateY(14px);
+}
+.reveal[data-from="left"] {
+  transform: translateX(-14px);
+}
+.reveal[data-from="right"] {
+  transform: translateX(14px);
+}
+.reveal[data-visible] {
+  opacity: 1;
+  transform: none;
+}
+
+/* 움직임 줄이기 설정 사용자는 애니메이션 없이 바로 보여준다 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* 계좌 카드 배경: 흰 바탕 위 종이 질감 50% (피그마 with-heart 카드) */
+.bg-card {
+  background:
+    linear-gradient(rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.5)),
+    url("/images/ui/bg-note.webp") center / cover,
+    #ffffff;
+}
+
+/* 갤러리 카드 스택 (GalleryStack). 뒤 카드가 앞으로 올라오는 움직임 */
+.gallery-card {
+  transform-origin: center;
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.45s ease-out;
+  will-change: transform;
+}
+
+/* 넘긴 카드: 기울어지며 옆으로 날아간다. --fly-dir 1 = 오른쪽, -1 = 왼쪽 */
+.gallery-fly {
+  animation: gallery-fly 0.45s cubic-bezier(0.4, 0, 1, 1) forwards;
+  pointer-events: none;
+}
+@keyframes gallery-fly {
+  to {
+    transform: translateX(calc(var(--fly-dir) * 420px)) rotate(calc(var(--fly-dir) * 18deg));
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-card {
+    transition: none;
+  }
+  .gallery-fly {
+    display: none;
+  }
+}
+
+/* 기본 스크롤바 숨김 (전체보기 목록은 ScrollList가 디자인대로 막대를 그린다) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

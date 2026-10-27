@@ -1,22 +1,31 @@
+import Image from "next/image";
+import heroImage from "../../../public/images/hero-main.webp";
+import { Reveal } from "@/components/Reveal";
 import { ceremony, couple } from "@/data/wedding";
 
-// TODO: 편지 봉투 + 메인 사진 레이어 (피그마 node 353:247)
 export function Hero() {
   return (
     <section className="pt-20 text-center">
-      <p className="font-display text-xs leading-none text-muted">THE WEDDING OF</p>
-      <h1 className="mt-8 flex flex-col items-center gap-2">
-        <span className="font-display text-6xl leading-none">{couple.groom.en}</span>
-        <span className="font-script text-3xl leading-none text-muted">And</span>
-        <span className="font-display text-6xl leading-none">{couple.bride.en}</span>
-      </h1>
-      <div className="mx-7 mt-10 flex aspect-[336/391] items-center justify-center bg-line text-sm text-muted">
-        메인 사진
-      </div>
-      <div className="mx-7 mt-2 flex justify-between font-display text-xs text-muted">
-        <span>OUR WEDDING DAY</span>
-        <span>{ceremony.dateDot}</span>
-      </div>
+      <Reveal as="p" className="font-display text-sm leading-none text-muted">
+        THE WEDDING OF
+      </Reveal>
+      <Reveal as="h1" delay={0.32} className="mt-6 flex flex-col items-center gap-1">
+        <span className="font-display text-[72px] leading-none">{couple.groom.en}</span>
+        <span className="font-script text-4xl leading-none text-muted">And</span>
+        <span className="font-display text-[72px] leading-none">{couple.bride.en}</span>
+      </Reveal>
+      {/* 봉투·폴라로이드·날짜가 합쳐진 이미지. 왼쪽 봉투가 화면 끝에 닿도록 좌우 여백 없이 전체 폭 */}
+      <Reveal delay={0.64} className="mt-10">
+        <Image
+          src={heroImage}
+          alt={`${couple.groom.name}와 ${couple.bride.name}의 웨딩 사진. OUR WEDDING DAY ${ceremony.dateDot}`}
+          className="h-auto w-full"
+          sizes="(max-width: 430px) 100vw, 430px"
+          // 첫 화면에 보이는 가장 큰 이미지(LCP)라 지연 로딩하지 않는다. Next 16에서 priority는 deprecated
+          loading="eager"
+          fetchPriority="high"
+        />
+      </Reveal>
     </section>
   );
 }

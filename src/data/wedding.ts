@@ -12,11 +12,18 @@ export const greeting = [
   "그 소중한 시작의 자리에 함께하시어\n따뜻하게 빛내주시면 감사하겠습니다.",
 ] as const;
 
+// 엔딩 맺음말 (이름 줄은 couple에서 만든다)
+export const closing = {
+  message: "저희 두 사람의 시작을\n함께해 주셔서 감사합니다.",
+  english: "thank you for celebrating with us.\nour day begins right here.",
+} as const;
+
 export const ceremony = {
-  // KST 기준. 시간은 확정되면 수정
-  date: new Date("2027-02-20T12:00:00+09:00"),
+  // KST 기준
+  date: new Date("2027-02-20T12:10:00+09:00"),
   dateDot: "2027.02.20",
-  dateLabel: "2027년 2월 20일 토요일 오후 12시",
+  dateLabel: "2027년 2월 20일 토요일 오후 12:10",
+  hall: "건대 스타시티아트홀 5F 단독홀",
 } as const;
 
 export const venue = {
@@ -65,3 +72,9 @@ export const site = {
   description: "2027년 2월 20일 토요일, 건대 스타시티 웨딩홀",
   ogImage: "/images/og.jpg",
 } as const;
+
+export type GalleryPhoto = { src: string; alt?: string };
+
+// 갤러리 사진: public/images/gallery/ 에 넣고 순서대로 적는다 (예: { src: "/images/gallery/01.webp" })
+// 비어 있으면 자리표시 카드가 보인다
+export const gallery: GalleryPhoto[] = [];

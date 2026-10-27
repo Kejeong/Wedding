@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/Reveal";
+
 type Props = {
   title: string;
   subtitle?: string;
@@ -9,11 +11,16 @@ export function SectionTitle({ title, subtitle }: Props) {
 
   return (
     <header className="px-5 text-center">
-      <h2 className="text-[40px] leading-none" aria-label={title}>
+      {/* 글꼴이 섞이면 줄 높이가 늘어나서 높이를 피그마 값(40px)으로 고정 */}
+      <Reveal as="h2" className="h-10 text-[40px] leading-none" aria-label={title}>
         <span className="font-script">{first}</span>
         <span className="font-display">{rest}</span>
-      </h2>
-      {subtitle && <p className="mt-2.5 text-base leading-normal text-body">{subtitle}</p>}
+      </Reveal>
+      {subtitle && (
+        <Reveal as="p" delay={0.32} className="mt-2.5 text-base leading-normal text-body">
+          {subtitle}
+        </Reveal>
+      )}
     </header>
   );
 }

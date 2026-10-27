@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
 import { CloseIcon, Modal } from "@/components/Modal";
+import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 import { useToast } from "@/components/Toast";
 import { createEntrySchema, passwordSchema, type GuestbookEntry, type GuestbookPage } from "@/lib/guestbook";
@@ -33,6 +34,57 @@ function Note({ entry, clamp, onDelete }: { entry: GuestbookEntry; clamp: boolea
         <CloseIcon />
       </button>
     </li>
+  );
+}
+
+// 피그마 스크롤바: 모달 오른쪽 끝에 붙은 4x100px 막대, 제목 아래(모달 위에서 101px)부터 모달 아래 끝까지 움직인다
+const THUMB_TOP = 101;
+const THUMB_HEIGHT = 100;
+
+/** 기본 스크롤바는 숨기고 디자인대로 그린 막대를 스크롤 위치에 맞춰 움직인다. 부모(Modal 안쪽 div)가 relative여야 한다 */
+function ScrollList({ children }: { children: React.ReactNode }) {
+  const list = useRef<HTMLUListElement>(null);
+  const thumb = useRef<HTMLSpanElement>(null);
+
+  const sync = useCallback(() => {
+    const el = list.current;
+    const bar = thumb.current;
+    if (!el || !bar) return;
+    const scrollable = el.scrollHeight > el.clientHeight + 1;
+    bar.style.display = scrollable ? "block" : "none";
+    if (!scrollable) return;
+    const track = el.offsetTop + el.offsetHeight - THUMB_TOP - THUMB_HEIGHT;
+    const progress = el.scrollTop / (el.scrollHeight - el.clientHeight);
+    bar.style.transform = `translateY(${progress * track}px)`;
+  }, []);
+
+  // 목록 내용(불러온 메시지)이나 화면 높이가 바뀌면 다시 맞춘다
+  useEffect(() => {
+    const el = list.current;
+    if (!el) return;
+    const observer = new ResizeObserver(sync);
+    observer.observe(el);
+    for (const child of el.children) observer.observe(child);
+    sync();
+    return () => observer.disconnect();
+  });
+
+  return (
+    <>
+      <ul
+        ref={list}
+        onScroll={sync}
+        className="no-scrollbar -mr-5 -mb-10 mt-10 h-[389px] max-h-[calc(100dvh-240px)] space-y-2.5 overflow-y-auto pr-5 pb-5"
+      >
+        {children}
+      </ul>
+      <span
+        ref={thumb}
+        aria-hidden
+        className="pointer-events-none absolute right-0 hidden w-1 bg-line"
+        style={{ top: THUMB_TOP, height: THUMB_HEIGHT }}
+      />
+    </>
   );
 }
 
@@ -171,6 +223,7 @@ export function Guestbook() {
   const toast = useToast();
   const [preview, setPreview] = useState<GuestbookPage | null>(null);
   const [all, setAll] = useState<GuestbookEntry[] | null>(null);
+  const [allFailed, setAllFailed] = useState(false);
   const [modal, setModal] = useState<ModalState>(null);
   const close = useCallback(() => setModal(null), []);
 
@@ -182,8 +235,10 @@ export function Guestbook() {
 
   // TODO: 메시지가 많아지면 offset 기반 무한 스크롤로 전환
   function openAll() {
+    setAll(null);
+    setAllFailed(false);
     setModal({ type: "all" });
-    fetchEntries(100).then((page) => setAll(page.entries), () => toast("방명록을 불러오지 못했습니다"));
+    fetchEntries(100).then((page) => setAll(page.entries), () => setAllFailed(true));
   }
 
   const subtitle = (
@@ -201,21 +256,23 @@ export function Guestbook() {
     <section className="mt-30">
       <SectionTitle title="MESSAGE" subtitle="따뜻한 축하의 한마디를 남겨주세요" />
 
-      <ul className="mt-10 space-y-2.5 px-5">
+      <Reveal as="ul" delay={0.32} className="mt-10 space-y-2.5 px-5">
         {preview?.entries.map((entry) => (
           <Note key={entry.id} entry={entry} clamp onDelete={() => setModal({ type: "delete", entry })} />
         ))}
         {preview && preview.entries.length === 0 && (
           <li className="py-10 text-center text-sm text-muted">첫 번째 축하 메시지를 남겨주세요</li>
         )}
-      </ul>
+      </Reveal>
 
-      <div className="mt-10 space-y-2.5 px-5">
-        {preview && preview.total > PREVIEW_COUNT && <Button onClick={openAll}>전체 보기</Button>}
-        <Button variant="solid" onClick={() => setModal({ type: "write" })}>
+      <Reveal delay={0.32} className="mt-10 space-y-2.5 px-5">
+        <Button variant="line" onClick={openAll}>
+          전체 보기
+        </Button>
+        <Button variant="solid" size="md" onClick={() => setModal({ type: "write" })}>
           메시지 남기기
         </Button>
-      </div>
+      </Reveal>
 
       <Modal open={modal?.type === "write"} onClose={close}>
         {subtitle}
@@ -232,11 +289,16 @@ export function Guestbook() {
 
       <Modal open={modal?.type === "all"} onClose={close}>
         {subtitle}
-        <ul className="mt-10 max-h-[60dvh] space-y-2.5 overflow-y-auto">
+        {/* 피그마 전체보기: 모달 높이 524px 고정, 목록(389px)은 모달 아래 끝까지 이어지며 스크롤된다 */}
+        <ScrollList>
+          {all === null && (
+            <li className="py-10 text-center text-sm text-muted">{allFailed ? "방명록을 불러오지 못했습니다" : "불러오는 중…"}</li>
+          )}
+          {all?.length === 0 && <li className="py-10 text-center text-sm text-muted">아직 남겨진 메시지가 없어요</li>}
           {all?.map((entry) => (
             <Note key={entry.id} entry={entry} clamp={false} onDelete={() => setModal({ type: "delete", entry })} />
           ))}
-        </ul>
+        </ScrollList>
       </Modal>
 
       <Modal open={modal?.type === "delete"} onClose={close}>
