@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/* 피그마 '청첩장_MO'에서 추출한 값 */
+@theme {
+  --color-ink: #1a1816;
+  --color-body: #424242;
+  --color-muted: #777777;
+  --color-faint: #bdbdbd;
+  --color-line: #dadada;
+  --color-line-light: #e7e7e7;
+  --color-paper: #f7f5f2;
+
+  /* IvyOra Display · Altesse Std는 Adobe Fonts 라이선스 폰트라 kit 연결 전까지 대체 폰트로 표시됨 */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: "ivyora-display", var(--font-cormorant), Georgia, serif;
+  --font-script: "altesse-std-24pt", var(--font-pinyon), cursive;
+
+  --tracking-tight-2: -0.02em;
+
+  --shadow-note: 0 2px 4px rgb(0 0 0 / 0.16);
+  --shadow-card: 2px 2px 6px rgb(0 0 0 / 0.1);
+}
+
+html {
+  background: #e9e6e1;
+}
+
+body {
+  @apply font-sans text-ink tracking-tight-2 antialiased;
+}
+
+/* 종이 질감 배경: public/images/paper.jpg 하나를 세로로 반복 (피그마는 375x667 타일) */
+.bg-paper-texture {
+  background-color: var(--color-paper);
+  background-image: url("/images/paper.jpg");
+  background-size: 100% auto;
+  background-repeat: repeat-y;
+}
