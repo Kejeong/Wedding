@@ -71,6 +71,8 @@ export const site = {
   title: "송제성 ♥ 김은혜 결혼합니다",
   description: "2027년 2월 20일 토요일, 건대 스타시티 웨딩홀",
   ogImage: "/images/og.jpg",
+  // 카카오톡 공유 메시지 템플릿 ID (Kakao Developers > 도구 > 메시지 템플릿)
+  kakaoTemplateId: 138441,
 } as const;
 
 export type GalleryPhoto = { src: string; alt?: string };

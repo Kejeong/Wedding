@@ -24,23 +24,10 @@ export function Ending() {
   }
 
   function shareKakao() {
-    const url = siteUrl();
-    const link = { mobileWebUrl: url, webUrl: url };
-    const sent = shareToKakao({
-      objectType: "feed",
-      content: {
-        title: site.title,
-        description: site.description,
-        // 카카오 서버가 직접 가져가므로 공개된 절대 주소여야 한다 (localhost 이미지는 표시되지 않음)
-        imageUrl: new URL(site.ogImage, url).toString(),
-        imageWidth: 1200,
-        imageHeight: 630,
-        link,
-      },
-      buttons: [{ title: "청첩장 보기", link }],
-    });
-    if (!sent) toast("잠시 후 다시 시도해주세요");
+    // 카드 모양·문구·이미지·버튼 링크는 메시지 템플릿 빌더에서 관리한다
+    if (!shareToKakao({ templateId: site.kakaoTemplateId })) toast("잠시 후 다시 시도해주세요");
   }
+
 
   return (
     <section className="mt-30 px-5 pb-10">
