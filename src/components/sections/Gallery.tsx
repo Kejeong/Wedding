@@ -10,7 +10,7 @@ export function Gallery() {
   return (
     <section className="mt-30">
       <SectionTitle title="GALLERY" />
-      <Reveal delay={0.32} className="mt-[60px]">
+      <Reveal className="mt-[60px]">
         <GalleryStack photos={gallery} placeholderCount={PLACEHOLDER_COUNT} />
       </Reveal>
     </section>

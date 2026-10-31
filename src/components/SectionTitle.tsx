@@ -17,7 +17,7 @@ export function SectionTitle({ title, subtitle }: Props) {
         <span className="font-display">{rest}</span>
       </Reveal>
       {subtitle && (
-        <Reveal as="p" delay={0.32} className="mt-2.5 text-base leading-normal text-body">
+        <Reveal as="p" className="mt-2.5 text-base leading-normal text-body">
           {subtitle}
         </Reveal>
       )}

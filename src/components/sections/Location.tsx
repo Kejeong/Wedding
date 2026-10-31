@@ -34,7 +34,7 @@ export function Location() {
         <p className="font-semibold">{venue.name}</p>
         <p>{venue.address}</p>
       </Reveal>
-      <Reveal delay={0.32} className="mt-5 grid grid-cols-2 gap-2.5">
+      <Reveal className="mt-5 grid grid-cols-2 gap-2.5">
         <Button variant="line" onClick={() => window.open(venue.kakaoMapUrl, "_blank")}>
           <PinIcon />
           카카오맵

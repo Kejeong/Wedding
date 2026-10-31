@@ -256,7 +256,7 @@ export function Guestbook() {
     <section className="mt-30">
       <SectionTitle title="MESSAGE" subtitle="따뜻한 축하의 한마디를 남겨주세요" />
 
-      <Reveal as="ul" delay={0.32} className="mt-10 space-y-2.5 px-5">
+      <Reveal as="ul" className="mt-10 space-y-2.5 px-5">
         {preview?.entries.map((entry) => (
           <Note key={entry.id} entry={entry} clamp onDelete={() => setModal({ type: "delete", entry })} />
         ))}
@@ -265,7 +265,7 @@ export function Guestbook() {
         )}
       </Reveal>
 
-      <Reveal delay={0.32} className="mt-10 space-y-2.5 px-5">
+      <Reveal className="mt-10 space-y-2.5 px-5">
         <Button variant="line" onClick={openAll}>
           전체 보기
         </Button>

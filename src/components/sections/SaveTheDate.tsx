@@ -20,7 +20,7 @@ export function SaveTheDate() {
     <section className="mt-30">
       <SectionTitle title="SAVE THE DATE" />
       {/* 피그마: 173px 칸 세 개를 가운데 정렬하고 양옆 칸은 화면 밖으로 잘리게 둔다 (19·21이 반쯤 보임) */}
-      <Reveal delay={0.32} className="mt-10 overflow-hidden border-y border-line">
+      <Reveal className="mt-10 overflow-hidden border-y border-line">
         <div className="relative left-1/2 grid w-[520px] -translate-x-1/2 grid-cols-[173px_174px_173px] text-center font-display lining-nums">
           {days.map((d, i) => {
             const isCurrent = i === 1;
@@ -34,7 +34,7 @@ export function SaveTheDate() {
           })}
         </div>
       </Reveal>
-      <Reveal as="p" delay={0.64} className="mt-10 px-5 text-center text-base leading-normal">
+      <Reveal as="p" className="mt-10 px-5 text-center text-base leading-normal">
         <span className="font-medium">{ceremony.dateLabel}</span>
         <br />
         {ceremony.hall}

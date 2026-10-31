@@ -1,3 +1,4 @@
+import { Intro } from "@/components/Intro";
 import { ToastProvider } from "@/components/Toast";
 import { Accounts } from "@/components/sections/Accounts";
 import { Ending } from "@/components/sections/Ending";
@@ -12,6 +13,7 @@ import { SaveTheDate } from "@/components/sections/SaveTheDate";
 export default function Home() {
   return (
     <ToastProvider>
+      <Intro />
       <main className="bg-paper-texture mx-auto min-h-dvh max-w-[430px] overflow-x-hidden">
         <Hero />
         <SaveTheDate />

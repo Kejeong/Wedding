@@ -59,21 +59,13 @@ body {
     #ffffff;
 }
 
-/* 등장 애니메이션 (Reveal 컴포넌트). 참고: 14px 이동 + 페이드, 0.95s ease-out */
+/* 등장 애니메이션 (Reveal 컴포넌트). 순서대로 한 줄씩, 8px만 살짝 떠오르며 부드럽게 */
 .reveal {
   opacity: 0;
+  transform: translateY(8px);
   transition:
-    opacity 0.95s ease-out,
-    transform 0.95s ease-out;
-}
-.reveal[data-from="up"] {
-  transform: translateY(14px);
-}
-.reveal[data-from="left"] {
-  transform: translateX(-14px);
-}
-.reveal[data-from="right"] {
-  transform: translateX(14px);
+    opacity 0.7s ease-out,
+    transform 0.7s cubic-bezier(0.25, 0.8, 0.3, 1);
 }
 .reveal[data-visible] {
   opacity: 1;
@@ -133,4 +125,93 @@ body {
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* ---------- 첫 진입 인트로 (Intro 컴포넌트) ----------
+   0.25s~  덮개가 실링과 함께 살짝 들렸다가 위로 빠진다
+   0.45s~  봉투 몸통이 아래로 빠진다
+   1.1s~   어둡던 첫 화면이 밝아지고, 3s에 인트로가 사라진다 (JS가 없어도 CSS만으로 사라진다) */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: none;
+  animation: intro-out 0.01s linear 3s forwards;
+}
+.intro-dim {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.4);
+  animation: intro-dim 1.8s ease-out 1.1s forwards;
+}
+.intro-envelope {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100vw, calc(100dvh * 440 / 720));
+  aspect-ratio: 440 / 720;
+  transform: translate(-50%, -50%);
+}
+.intro-body,
+.intro-flap-paper {
+  position: absolute;
+  inset: 0;
+  background: url("/images/intro/envelope.webp") center / 100% 100%;
+}
+/* 몸통: 덮개 V자 아래쪽. 실링 자리는 덮개와 함께 올라가도록 구멍을 낸다 */
+.intro-body {
+  clip-path: polygon(0 28.5%, 50% 59.2%, 100% 28.8%, 100% 100%, 0 100%);
+  mask-image: radial-gradient(ellipse 13.9% 8.5% at 50% 59.2%, transparent 97%, #000 100%);
+  animation: intro-body 0.8s cubic-bezier(0.55, 0, 0.75, 0.3) 0.45s forwards;
+}
+.intro-flap {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.25));
+  animation: intro-flap 1.15s cubic-bezier(0.45, 0, 0.55, 1) 0.25s forwards;
+}
+.intro-flap-paper {
+  clip-path: polygon(0 0, 100% 0, 100% 28.8%, 50% 59.2%, 0 28.5%);
+}
+.intro-seal {
+  position: absolute;
+  top: 59.2%;
+  left: 50%;
+  width: 34.1%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: url("/images/intro/seal.webp") center / 100% 100%;
+  /* 잘라낸 정사각형에서 실링(지름 120/150)만 남긴다 */
+  mask-image: radial-gradient(circle closest-side, #000 78%, transparent 82%);
+}
+
+@keyframes intro-flap {
+  15% {
+    transform: translateY(-2%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+@keyframes intro-body {
+  to {
+    transform: translateY(110%);
+  }
+}
+@keyframes intro-dim {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes intro-out {
+  to {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
 }

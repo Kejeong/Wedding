@@ -18,15 +18,15 @@ export function Invitation() {
         />
       </Reveal>
       <div className="mt-10 space-y-3 text-base leading-normal">
-        {greeting.map((paragraph, i) => (
-          <Reveal as="p" key={paragraph} delay={i * 0.32} className="whitespace-pre-line">
+        {greeting.map((paragraph) => (
+          <Reveal as="p" key={paragraph} className="whitespace-pre-line">
             {paragraph}
           </Reveal>
         ))}
       </div>
       <dl className="mt-14 text-base leading-normal">
-        {[groom, bride].map((person, i) => (
-          <Reveal key={person.name} from="left" delay={i * 0.32}>
+        {[groom, bride].map((person) => (
+          <Reveal key={person.name}>
             <dt className="inline">
               {person.father} · {person.mother}
             </dt>

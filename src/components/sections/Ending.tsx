@@ -39,14 +39,14 @@ export function Ending() {
         <Reveal as="p" className="text-base leading-normal font-semibold">
           {couple.groom.name} · {couple.bride.name} 올림
         </Reveal>
-        <Reveal as="p" delay={0.32} className="mt-1 text-base leading-normal whitespace-pre-line">
+        <Reveal as="p" className="mt-1 text-base leading-normal whitespace-pre-line">
           {closing.message}
         </Reveal>
-        <Reveal as="p" delay={0.64} className="mt-4 font-display text-[13px] leading-[1.2] whitespace-pre-line text-muted">
+        <Reveal as="p" className="mt-4 font-display text-[13px] leading-[1.2] whitespace-pre-line text-muted">
           {closing.english}
         </Reveal>
       </div>
-      <Reveal delay={0.32} className="mt-10 grid grid-cols-2 gap-2.5">
+      <Reveal className="mt-10 grid grid-cols-2 gap-2.5">
         <Button variant="line" onClick={shareKakao}>
           <KakaoIcon />
           카카오톡 공유

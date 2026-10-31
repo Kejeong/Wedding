@@ -1,21 +1,19 @@
 import Image from "next/image";
 import heroImage from "../../../public/images/hero-main.webp";
-import { Reveal } from "@/components/Reveal";
 import { ceremony, couple } from "@/data/wedding";
 
+// 첫 화면은 인트로 봉투가 열리면 바로 보여야 해서 등장 애니메이션(Reveal)을 쓰지 않는다
 export function Hero() {
   return (
     <section className="pt-20 text-center">
-      <Reveal as="p" className="font-display text-sm leading-none text-muted">
-        THE WEDDING OF
-      </Reveal>
-      <Reveal as="h1" delay={0.32} className="mt-6 flex flex-col items-center gap-1">
+      <p className="font-display text-sm leading-none text-muted">THE WEDDING OF</p>
+      <h1 className="mt-6 flex flex-col items-center gap-1">
         <span className="font-display text-[72px] leading-none">{couple.groom.en}</span>
         <span className="font-script text-4xl leading-none text-muted">And</span>
         <span className="font-display text-[72px] leading-none">{couple.bride.en}</span>
-      </Reveal>
+      </h1>
       {/* 봉투·폴라로이드·날짜가 합쳐진 이미지. 왼쪽 봉투가 화면 끝에 닿도록 좌우 여백 없이 전체 폭 */}
-      <Reveal delay={0.64} className="mt-10">
+      <div className="mt-10">
         <Image
           src={heroImage}
           alt={`${couple.groom.name}와 ${couple.bride.name}의 웨딩 사진. OUR WEDDING DAY ${ceremony.dateDot}`}
@@ -25,7 +23,7 @@ export function Hero() {
           loading="eager"
           fetchPriority="high"
         />
-      </Reveal>
+      </div>
     </section>
   );
 }
