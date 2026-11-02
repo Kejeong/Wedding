@@ -32,8 +32,10 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  // suppressHydrationWarning: 브라우저 확장(예: 한컴 HWP 뷰어 data-hwp-extension)이 <html>에 속성을 붙여 생기는
+  // hydration 경고만 무시한다. 이 태그 한 단계에만 적용되고 안쪽 내용의 불일치는 그대로 알려준다
   return (
-    <html lang="ko" className={`${cormorant.variable} ${pinyon.variable}`}>
+    <html lang="ko" className={`${cormorant.variable} ${pinyon.variable}`} suppressHydrationWarning>
       <head>
         <link
           rel="stylesheet"

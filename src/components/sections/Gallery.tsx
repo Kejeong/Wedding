@@ -1,4 +1,4 @@
-import { GalleryStack } from "@/components/GalleryStack";
+import { GalleryCarousel } from "@/components/GalleryCarousel";
 import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 import { gallery } from "@/data/wedding";
@@ -10,8 +10,8 @@ export function Gallery() {
   return (
     <section className="mt-30">
       <SectionTitle title="GALLERY" />
-      <Reveal className="mt-[60px]">
-        <GalleryStack photos={gallery} placeholderCount={PLACEHOLDER_COUNT} />
+      <Reveal className="mt-[34px]">
+        <GalleryCarousel photos={gallery} placeholderCount={PLACEHOLDER_COUNT} />
       </Reveal>
     </section>
   );

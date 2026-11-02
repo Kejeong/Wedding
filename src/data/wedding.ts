@@ -12,11 +12,11 @@ export const greeting = [
   "그 소중한 시작의 자리에 함께하시어\n따뜻하게 빛내주시면 감사하겠습니다.",
 ] as const;
 
-// 엔딩 맺음말 (이름 줄은 couple에서 만든다)
-export const closing = {
-  message: "저희 두 사람의 시작을\n함께해 주셔서 감사합니다.",
-  english: "thank you for celebrating with us.\nour day begins right here.",
-} as const;
+// 하단 손글씨 메모 두 장 (문단 안 줄바꿈은 \n)
+export const closingNotes = [
+  "저희 두 사람의 새로운 시작을 함께\n축복해주셔서 진심으로 감사드립니다.\n보내주신 응원에 보답할 수 있도록\n행복하게 잘 살아가겠습니다.",
+  "건네주신 다정한 마음을 소중히 간직하며,\n귀한 걸음 해주신 모든 분들의 일상에\n언제나 소망하시는 모든 일들이 순조로이\n이루어지기를 진심으로 기원합니다.",
+] as const;
 
 export const ceremony = {
   // KST 기준
@@ -77,6 +77,20 @@ export const site = {
 
 export type GalleryPhoto = { src: string; alt?: string };
 
-// 갤러리 사진: public/images/gallery/ 에 넣고 순서대로 적는다 (예: { src: "/images/gallery/01.webp" })
-// 비어 있으면 자리표시 카드가 보인다
-export const gallery: GalleryPhoto[] = [];
+// 갤러리 사진: public/images/gallery/ (폴라로이드 테두리·클립이 이미지에 들어 있는 540x859)
+// 화면에 이 목록 순서대로 나온다. 순서를 바꾸려면 줄 순서만 바꾸면 된다
+export const gallery: GalleryPhoto[] = [
+  { src: "/images/gallery/01.webp", alt: "웨딩 사진 1" },
+  { src: "/images/gallery/02.webp", alt: "웨딩 사진 2" },
+  { src: "/images/gallery/03.webp", alt: "웨딩 사진 3" },
+  { src: "/images/gallery/04.webp", alt: "웨딩 사진 4" },
+  { src: "/images/gallery/05.webp", alt: "웨딩 사진 5" },
+  { src: "/images/gallery/06.webp", alt: "웨딩 사진 6" },
+  { src: "/images/gallery/07.webp", alt: "웨딩 사진 7" },
+  { src: "/images/gallery/08.webp", alt: "웨딩 사진 8" },
+  { src: "/images/gallery/09.webp", alt: "웨딩 사진 9" },
+  { src: "/images/gallery/10.webp", alt: "웨딩 사진 10" },
+  { src: "/images/gallery/11.webp", alt: "웨딩 사진 11" },
+  { src: "/images/gallery/12.webp", alt: "웨딩 사진 12" },
+  { src: "/images/gallery/13.webp", alt: "웨딩 사진 13" },
+];

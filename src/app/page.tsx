@@ -20,8 +20,8 @@ export default function Home() {
         <Invitation />
         <Location />
         <Accounts />
-        <Guestbook />
         <Gallery />
+        <Guestbook />
         <Ending />
       </main>
     </ToastProvider>
