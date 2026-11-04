@@ -6,11 +6,11 @@ import { ceremony, couple } from "@/data/wedding";
 export function Hero() {
   return (
     <section className="pt-20 text-center">
-      <p className="font-display text-sm leading-none text-muted">THE WEDDING OF</p>
-      <h1 className="mt-6 flex flex-col items-center gap-1">
-        <span className="font-display text-[72px] leading-none">{couple.groom.en}</span>
+      <p className="font-display text-xs leading-none text-muted">THE WEDDING OF</p>
+      <h1 className="mt-5 flex flex-col items-center">
+        <span className="font-display text-6xl leading-none">{couple.groom.en}</span>
         <span className="font-script text-4xl leading-none text-muted">And</span>
-        <span className="font-display text-[72px] leading-none">{couple.bride.en}</span>
+        <span className="font-display text-6xl leading-none">{couple.bride.en}</span>
       </h1>
       {/* 봉투·폴라로이드·날짜가 합쳐진 이미지. 왼쪽 봉투가 화면 끝에 닿도록 좌우 여백 없이 전체 폭 */}
       <div className="mt-10">

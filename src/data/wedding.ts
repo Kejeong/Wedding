@@ -18,6 +18,15 @@ export const closingNotes = [
   "건네주신 다정한 마음을 소중히 간직하며,\n귀한 걸음 해주신 모든 분들의 일상에\n언제나 소망하시는 모든 일들이 순조로이\n이루어지기를 진심으로 기원합니다.",
 ] as const;
 
+// 하단 THANK YOU 축하 화환 (주문 페이지에 예식장·일시가 미리 입력되어 있다)
+export const flowers = {
+  description: "예식일에 맞춰 축하 화환을 보낼 수 있습니다\n예식장과 예식 일시는 미리 입력되어 있습니다",
+  popupMessage: "신랑, 신부의 새로운 시작을 축하해주세요.\n화환은 예식일에 맞춰 웨딩홀로 배송됩니다.",
+  orderUrl: "https://xn--wh1br48ap0ao51bua.com/w/mhkSBr7g8p/order",
+  // 팝업에 보이는 주소 (디자인 표기, 오시는 길 주소와 표기가 다르다)
+  address: "서울 광진구 능동로 110 스타시티 영존 5층",
+} as const;
+
 export const ceremony = {
   // KST 기준
   date: new Date("2027-02-20T12:10:00+09:00"),
@@ -77,20 +86,19 @@ export const site = {
 
 export type GalleryPhoto = { src: string; alt?: string };
 
-// 갤러리 사진: public/images/gallery/ (폴라로이드 테두리·클립이 이미지에 들어 있는 540x859)
+// 갤러리 사진: public/images/gallery/ (폴라로이드 테두리·클립이 이미지에 들어 있는 1080x1718 고화질)
 // 화면에 이 목록 순서대로 나온다. 순서를 바꾸려면 줄 순서만 바꾸면 된다
 export const gallery: GalleryPhoto[] = [
   { src: "/images/gallery/01.webp", alt: "웨딩 사진 1" },
   { src: "/images/gallery/02.webp", alt: "웨딩 사진 2" },
-  { src: "/images/gallery/03.webp", alt: "웨딩 사진 3" },
-  { src: "/images/gallery/04.webp", alt: "웨딩 사진 4" },
-  { src: "/images/gallery/05.webp", alt: "웨딩 사진 5" },
-  { src: "/images/gallery/06.webp", alt: "웨딩 사진 6" },
-  { src: "/images/gallery/07.webp", alt: "웨딩 사진 7" },
-  { src: "/images/gallery/08.webp", alt: "웨딩 사진 8" },
-  { src: "/images/gallery/09.webp", alt: "웨딩 사진 9" },
-  { src: "/images/gallery/10.webp", alt: "웨딩 사진 10" },
-  { src: "/images/gallery/11.webp", alt: "웨딩 사진 11" },
-  { src: "/images/gallery/12.webp", alt: "웨딩 사진 12" },
-  { src: "/images/gallery/13.webp", alt: "웨딩 사진 13" },
+  { src: "/images/gallery/04.webp", alt: "웨딩 사진 3" },
+  { src: "/images/gallery/05.webp", alt: "웨딩 사진 4" },
+  { src: "/images/gallery/06.webp", alt: "웨딩 사진 5" },
+  { src: "/images/gallery/07.webp", alt: "웨딩 사진 6" },
+  { src: "/images/gallery/08.webp", alt: "웨딩 사진 7" },
+  { src: "/images/gallery/09.webp", alt: "웨딩 사진 8" },
+  { src: "/images/gallery/10.webp", alt: "웨딩 사진 9" },
+  { src: "/images/gallery/11.webp", alt: "웨딩 사진 10" },
+  { src: "/images/gallery/12.webp", alt: "웨딩 사진 11" },
+  { src: "/images/gallery/13.webp", alt: "웨딩 사진 12" },
 ];

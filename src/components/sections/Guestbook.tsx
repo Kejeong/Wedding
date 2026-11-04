@@ -12,7 +12,8 @@ const PREVIEW_COUNT = 3;
 const inputClass =
   "block w-full border border-line bg-transparent px-4 py-3 text-sm leading-normal text-ink placeholder:text-muted focus:border-ink focus:outline-none aria-invalid:border-danger";
 
-type ModalState = { type: "write" } | { type: "all" } | { type: "delete"; entry: GuestbookEntry } | null;
+// 작성·전체 보기 팝업. 삭제 팝업은 전체 보기 위에도 겹쳐 뜰 수 있게 따로 관리한다
+type ModalState = { type: "write" } | { type: "all" } | null;
 
 async function fetchEntries(limit: number): Promise<GuestbookPage> {
   const res = await fetch(`/api/guestbook?limit=${limit}`, { cache: "no-store" });
@@ -22,7 +23,7 @@ async function fetchEntries(limit: number): Promise<GuestbookPage> {
 
 function Note({ entry, clamp, onDelete }: { entry: GuestbookEntry; clamp: boolean; onDelete: () => void }) {
   return (
-    <li className={`relative flex flex-col justify-between bg-white p-5 shadow-note ${clamp ? "h-[130px]" : "min-h-[130px]"}`}>
+    <li className={`bg-card relative flex flex-col justify-between p-5 shadow-note ${clamp ? "h-[130px]" : "min-h-[130px]"}`}>
       <p className={`pr-5 text-sm leading-normal whitespace-pre-line break-all ${clamp ? "line-clamp-3" : ""}`}>
         {entry.message}
       </p>
@@ -225,7 +226,9 @@ export function Guestbook() {
   const [all, setAll] = useState<GuestbookEntry[] | null>(null);
   const [allFailed, setAllFailed] = useState(false);
   const [modal, setModal] = useState<ModalState>(null);
+  const [deleting, setDeleting] = useState<GuestbookEntry | null>(null);
   const close = useCallback(() => setModal(null), []);
+  const closeDelete = useCallback(() => setDeleting(null), []);
 
   const reload = useCallback(() => {
     fetchEntries(PREVIEW_COUNT).then(setPreview, () => toast("방명록을 불러오지 못했습니다"));
@@ -245,7 +248,7 @@ export function Guestbook() {
     <header className="text-center">
       {/* 글꼴이 섞이면 줄 높이가 늘어나서 높이를 피그마 값(30px)으로 고정 */}
       <h2 className="h-[30px] text-[30px] leading-none">
-        <span className="font-script">M</span>
+        <span className="font-script">M&nbsp;</span>
         <span className="font-display">ESSAGE</span>
       </h2>
       <p className="mt-2.5 text-sm leading-normal text-body">저희 둘의 결혼을 함께 축하해주세요</p>
@@ -258,7 +261,7 @@ export function Guestbook() {
 
       <Reveal as="ul" className="mt-10 space-y-2.5 px-5">
         {preview?.entries.map((entry) => (
-          <Note key={entry.id} entry={entry} clamp onDelete={() => setModal({ type: "delete", entry })} />
+          <Note key={entry.id} entry={entry} clamp onDelete={() => setDeleting(entry)} />
         ))}
         {preview && preview.entries.length === 0 && (
           <li className="py-10 text-center text-sm text-muted">첫 번째 축하 메시지를 남겨주세요</li>
@@ -296,19 +299,20 @@ export function Guestbook() {
           )}
           {all?.length === 0 && <li className="py-10 text-center text-sm text-muted">아직 남겨진 메시지가 없어요</li>}
           {all?.map((entry) => (
-            <Note key={entry.id} entry={entry} clamp={false} onDelete={() => setModal({ type: "delete", entry })} />
+            <Note key={entry.id} entry={entry} clamp={false} onDelete={() => setDeleting(entry)} />
           ))}
         </ScrollList>
       </Modal>
 
-      <Modal open={modal?.type === "delete"} onClose={close}>
-        {modal?.type === "delete" && (
+      {/* 전체 보기에서 X를 누르면 전체 보기는 그대로 두고 그 위에 삭제 팝업이 뜬다. 삭제 후에도 전체 보기 목록이 갱신된 채로 남는다 */}
+      <Modal open={deleting !== null} onClose={closeDelete}>
+        {deleting && (
           <DeleteForm
-            key={modal.entry.id}
-            entry={modal.entry}
+            key={deleting.id}
+            entry={deleting}
             onDone={() => {
-              close();
-              setAll((prev) => prev?.filter((e) => e.id !== modal.entry.id) ?? null);
+              closeDelete();
+              setAll((prev) => prev?.filter((e) => e.id !== deleting.id) ?? null);
               reload();
               toast("메시지가 삭제되었습니다");
             }}

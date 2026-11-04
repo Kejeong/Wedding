@@ -10,8 +10,8 @@ function AccountGroup({ title, items }: { title: string; items: Account[] }) {
   const toast = useToast();
 
   async function copy(account: Account) {
-    // 은행 앱 붙여넣기 호환을 위해 하이픈 없이 복사
-    if (await copyText(`${account.bank} ${account.number.replaceAll("-", "")}`)) toast("계좌번호가 복사되었습니다");
+    // 은행 이름은 빼고 계좌번호만, 은행 앱 붙여넣기 호환을 위해 하이픈 없이 복사
+    if (await copyText(account.number.replaceAll("-", ""))) toast("계좌번호가 복사되었습니다");
   }
 
   return (

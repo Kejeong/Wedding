@@ -27,6 +27,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  // 아이폰 Safari는 16px보다 작은 입력칸(방명록 14px)을 누르면 화면을 확대하고 되돌리지 않는다.
+  // 최대 배율을 1로 막아 자동 확대를 없앤다 (iOS는 이 값과 상관없이 손가락 확대는 계속 허용한다)
+  maximumScale: 1,
   viewportFit: "cover",
   themeColor: "#f7f5f2",
 };

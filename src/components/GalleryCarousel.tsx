@@ -130,8 +130,8 @@ export function GalleryCarousel({ photos, placeholderCount }: { photos: GalleryP
               <Image
                 src={src.src}
                 alt={src.alt ?? `웨딩 사진 ${photo + 1}`}
-                width={540}
-                height={859}
+                width={1080}
+                height={1718}
                 sizes="262px"
                 className="pointer-events-none h-auto w-full select-none"
                 draggable={false}

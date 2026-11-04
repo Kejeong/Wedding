@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import mapImage from "../../../public/images/location-map.webp";
+import mapImage from "../../../public/images/location-map.svg";
 import { Button } from "@/components/Button";
 import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
@@ -26,7 +26,8 @@ export function Location() {
           src={mapImage}
           alt="약도: 건대입구역(2·7호선) 옆 스타시티 웨딩홀, 건국대학교 병원과 롯데백화점 인근"
           className="h-auto w-full"
-          sizes="335px"
+          // SVG 약도는 벡터라 크기 변환(최적화) 없이 그대로 보여준다
+          unoptimized
         />
       </Reveal>
 
@@ -35,11 +36,11 @@ export function Location() {
         <p>{venue.address}</p>
       </Reveal>
       <Reveal className="mt-5 grid grid-cols-2 gap-2.5">
-        <Button variant="line" onClick={() => window.open(venue.kakaoMapUrl, "_blank")}>
+        <Button variant="line" size="sm" onClick={() => window.open(venue.kakaoMapUrl, "_blank")}>
           <PinIcon />
           카카오맵
         </Button>
-        <Button variant="line" onClick={copyAddress}>
+        <Button variant="line" size="sm" onClick={copyAddress}>
           <CopyIcon />
           주소 복사
         </Button>
@@ -51,7 +52,7 @@ export function Location() {
       <dl className="mt-10 space-y-6 text-base leading-normal">
         {venue.transport.map(({ title, lines }) => (
           <Reveal key={title}>
-            <dt className="font-semibold">{title}</dt>
+            <dt className="mb-1.5 font-semibold">{title}</dt>
             {lines.map((line) => (
               <dd key={line}>{line}</dd>
             ))}
