@@ -12,7 +12,7 @@ import { Modal } from "@/components/Modal";
 import { SectionTitle } from "@/components/SectionTitle";
 import { useToast } from "@/components/Toast";
 import { CopyIcon } from "@/components/sections/Accounts";
-import { ceremony, closingNotes, flowers, site } from "@/data/wedding";
+import { ceremony, closingNotes, flowers, kakaoShare } from "@/data/wedding";
 import { copyText } from "@/lib/clipboard";
 import { initKakao, KAKAO_SDK_INTEGRITY, KAKAO_SDK_URL, shareToKakao } from "@/lib/kakao";
 
@@ -30,8 +30,22 @@ export function Ending() {
   }
 
   function shareKakao() {
-    // 카드 모양·문구·이미지·버튼 링크는 메시지 템플릿 빌더에서 관리한다
-    if (!shareToKakao({ templateId: site.kakaoTemplateId })) toast("잠시 후 다시 시도해주세요");
+    const url = siteUrl();
+    const link = { mobileWebUrl: url, webUrl: url };
+    const sent = shareToKakao({
+      objectType: "feed",
+      content: {
+        title: kakaoShare.title,
+        description: kakaoShare.description,
+        // 카카오 서버가 직접 가져가므로 배포된 사이트의 https 주소여야 한다 (localhost 이미지는 표시되지 않음)
+        imageUrl: new URL(kakaoShare.image, url).toString(),
+        imageWidth: 800,
+        imageHeight: 800,
+        link,
+      },
+      buttons: [{ title: kakaoShare.buttonTitle, link }],
+    });
+    if (!sent) toast("잠시 후 다시 시도해주세요");
   }
 
   return (

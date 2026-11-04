@@ -80,8 +80,14 @@ export const site = {
   title: "송제성 ♥ 김은혜 결혼합니다",
   description: "2027년 2월 20일 토요일, 건대 스타시티 웨딩홀",
   ogImage: "/images/og.jpg",
-  // 카카오톡 공유 메시지 템플릿 ID (Kakao Developers > 도구 > 메시지 템플릿)
-  kakaoTemplateId: 138441,
+} as const;
+
+// 카카오톡 공유 카드 (공유 버튼). 이미지는 사이트에 올린 800x800 JPG
+export const kakaoShare = {
+  title: "송제성 ♥ 김은혜 결혼합니다.",
+  description: "2027년 2월 20일 (토) 오후 12:10\n건대 스타시티 웨딩홀 5F",
+  image: "/images/kakao-thumb.jpg",
+  buttonTitle: "모바일 청첩장 바로가기",
 } as const;
 
 export type GalleryPhoto = { src: string; alt?: string };

@@ -9,9 +9,9 @@ import { preload } from "react-dom";
 const ENVELOPE_SRC = "/images/intro/envelope.webp";
 const SEAL_SRC = "/images/intro/seal.webp";
 // 움직임 시작부터 인트로가 사라질 때까지 (globals.css의 intro 애니메이션 길이와 맞춘다)
-const PLAY_MS = 3700;
-// 이미지가 늦게 와도 이 시간이 지나면 시작한다
-const MAX_WAIT_MS = 1200;
+const PLAY_MS = 3200;
+// 준비가 늦어도 이 시간이 지나면 시작한다
+const MAX_WAIT_MS = 1500;
 // 이미지 준비 후 첫 프레임이 그려질 여유
 const START_DELAY_MS = 50;
 
@@ -40,10 +40,17 @@ export function Intro() {
     let cancelled = false;
     let doneTimer: ReturnType<typeof setTimeout>;
 
-    // 첫 화면을 그리느라 바쁜 순간을 피해서, 이미지 해독이 끝나고 잠깐 뒤에 움직이기 시작한다
+    // 봉투가 움직이는 도중에 아래 페이지가 사진 해독·글꼴 교체로 다시 그려지면 버벅이므로,
+    // 봉투 이미지·첫 화면 메인 사진·글꼴이 모두 준비된 뒤 잠깐 있다가 움직이기 시작한다
     // (requestAnimationFrame은 화면이 가려져 있으면 멈추므로 타이머로 시작한다)
+    const heroImage = document.querySelector<HTMLImageElement>("main section img");
     const ready = Promise.race([
-      Promise.all([decode(ENVELOPE_SRC), decode(SEAL_SRC)]),
+      Promise.all([
+        decode(ENVELOPE_SRC),
+        decode(SEAL_SRC),
+        heroImage?.decode().catch(() => undefined),
+        document.fonts.ready,
+      ]),
       new Promise((resolve) => setTimeout(resolve, MAX_WAIT_MS)),
     ]);
     ready.then(() =>
