@@ -83,10 +83,11 @@ export const site = {
 } as const;
 
 // 카카오톡 공유 카드 (공유 버튼). 이미지는 사이트에 올린 800x800 JPG
+// 이미지를 바꿀 땐 파일 이름도 바꿔야 카카오가 예전 이미지를 다시 쓰지 않는다
 export const kakaoShare = {
   title: "송제성 ♥ 김은혜 결혼합니다.",
   description: "2027년 2월 20일 (토) 오후 12:10\n건대 스타시티 웨딩홀 5F",
-  image: "/images/kakao-thumb.jpg",
+  image: "/images/kakao-share.jpg",
   buttonTitle: "모바일 청첩장 바로가기",
 } as const;
 

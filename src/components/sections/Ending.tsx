@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Script from "next/script";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import polaroid1 from "../../../public/images/ending/polaroid-1.webp";
 import polaroid2 from "../../../public/images/ending/polaroid-2.webp";
 import rings from "../../../public/images/ending/rings.webp";
@@ -14,11 +14,13 @@ import { useToast } from "@/components/Toast";
 import { CopyIcon } from "@/components/sections/Accounts";
 import { ceremony, closingNotes, flowers, kakaoShare } from "@/data/wedding";
 import { copyText } from "@/lib/clipboard";
-import { initKakao, KAKAO_SDK_INTEGRITY, KAKAO_SDK_URL, shareToKakao } from "@/lib/kakao";
+import { initKakao, KAKAO_SDK_INTEGRITY, KAKAO_SDK_URL, prepareKakaoImage, shareToKakao } from "@/lib/kakao";
 
 export function Ending() {
   const toast = useToast();
   const [flowersOpen, setFlowersOpen] = useState(false);
+  // 카카오 CDN에 올려 둔 공유 이미지 주소 (준비 전에는 사이트 주소를 쓴다)
+  const kakaoImageRef = useRef<string | null>(null);
 
   // 배포 후에는 NEXT_PUBLIC_SITE_URL(실제 도메인) 기준으로 공유한다. 쿼리스트링 등은 붙이지 않는다
   function siteUrl() {
@@ -29,6 +31,13 @@ export function Ending() {
     if (await copyText(siteUrl())) toast("링크가 복사되었습니다");
   }
 
+  function onKakaoReady() {
+    initKakao();
+    prepareKakaoImage(new URL(kakaoShare.image, siteUrl()).toString()).then((src) => {
+      kakaoImageRef.current = src;
+    });
+  }
+
   function shareKakao() {
     const url = siteUrl();
     const link = { mobileWebUrl: url, webUrl: url };
@@ -37,8 +46,8 @@ export function Ending() {
       content: {
         title: kakaoShare.title,
         description: kakaoShare.description,
-        // 카카오 서버가 직접 가져가므로 배포된 사이트의 https 주소여야 한다 (localhost 이미지는 표시되지 않음)
-        imageUrl: new URL(kakaoShare.image, url).toString(),
+        // 카카오 CDN 주소가 준비됐으면 그걸 쓰고, 아니면 배포된 사이트의 https 주소 (localhost 이미지는 표시되지 않음)
+        imageUrl: kakaoImageRef.current ?? new URL(kakaoShare.image, url).toString(),
         imageWidth: 800,
         imageHeight: 800,
         link,
@@ -50,7 +59,7 @@ export function Ending() {
 
   return (
     <section className="mt-30 pb-10">
-      <Script src={KAKAO_SDK_URL} integrity={KAKAO_SDK_INTEGRITY} crossOrigin="anonymous" onReady={initKakao} />
+      <Script src={KAKAO_SDK_URL} integrity={KAKAO_SDK_INTEGRITY} crossOrigin="anonymous" onReady={onKakaoReady} />
       {/* 피그마 하단: 375px 기준으로 폴라로이드 2장과 손글씨 메모 2장을 겹쳐 놓은 구성. 좌표는 이 상자 기준 */}
       <div className="relative left-1/2 h-[1088px] w-[375px] -translate-x-1/2">
         <Reveal className="absolute top-0 left-5 w-[262px]">
