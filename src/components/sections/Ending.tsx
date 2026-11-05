@@ -108,6 +108,8 @@ export function Ending() {
         <br />
         ALL RIGHTS RESERVED.
       </p>
+      {/* 제작자 표시: 저작권 문구와 같은 글꼴·크기·색 */}
+      <p className="mt-3 text-center text-xs leading-[1.15] text-muted">dev.KEJ</p>
     </section>
   );
 }

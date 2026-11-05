@@ -9,11 +9,11 @@ import { preload } from "react-dom";
 const FLAP_SRC = "/images/intro/envelope-top.webp";
 const BODY_SRC = "/images/intro/envelope-bottom.webp";
 // 누른 뒤 인트로가 사라질 때까지 (globals.css의 intro 애니메이션 길이와 맞춘다)
-const PLAY_MS = 3100;
+const PLAY_MS = 2900;
 // 준비가 늦어도 이 시간이 지나면 연다
 const MAX_WAIT_MS = 1500;
 // 준비된 뒤 봉투를 잠깐 보여주고 연다
-const HOLD_MS = 400;
+const HOLD_MS = 200;
 
 type Phase = "loading" | "ready" | "playing" | "done";
 
