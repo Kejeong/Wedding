@@ -100,6 +100,14 @@ body {
     #ffffff;
 }
 
+/* 방명록 전체보기 카드: 종이 질감을 20%만 (흰색 80%를 덮는다) */
+.bg-card-light {
+  background:
+    linear-gradient(rgb(255 255 255 / 0.8), rgb(255 255 255 / 0.8)),
+    url("/images/ui/bg-note.webp") center / cover,
+    #ffffff;
+}
+
 /* 기본 스크롤바 숨김 (전체보기 목록은 ScrollList가 디자인대로 막대를 그린다) */
 .no-scrollbar {
   scrollbar-width: none;
@@ -109,85 +117,81 @@ body {
 }
 
 /* ---------- 첫 진입 인트로 (Intro 컴포넌트) ----------
-   봉투 이미지(영상 첫 프레임 440x720)를 덮개 V자 선을 따라 두 조각으로 나눈다.
-   덮개 선 위치는 첫 프레임에서 측정: 양옆 28.65% 높이에서 시작해 가운데 64.7%(실링 아래)에서 만난다.
-   봉투·첫 화면 사진·글꼴이 준비되면 JS가 data-playing을 붙이고, 그때부터 아래 순서로 움직인다
-   0.3s~  덮개가 실링과 함께 살짝 들렸다가 1.5초 동안 위로 빠진다
-   0.55s~ 몸통이 1.05초 동안 아래로 빠진다
-   1.3s~  어둡던 첫 화면이 1.8초 동안 밝아지고, 3.2s에 인트로가 사라진다
-   JS가 실행되지 않으면 6초 뒤 CSS만으로 사라진다 */
+   봉투 윗면(덮개+실링)과 아랫면(몸통) 이미지 두 장(750x1333, 투명 배경)을 겹쳐 놓는다.
+   봉투·첫 화면 사진·글꼴이 준비되면(그 전에 화면을 누르면 바로) JS가 data-playing을 붙이고 아래 순서로 움직인다
+   0s~    실링이 눌리듯 살짝 작아졌다가
+   0.2s~  덮개가 살짝 들렸다가 1.5초 동안 위로 빠진다
+   0.45s~ 몸통이 1.05초 동안 아래로 빠진다
+   1.2s~  어둡던 첫 화면이 1.8초 동안 밝아지고, 3.1s에 인트로가 사라진다
+   JS가 실행되지 않으면(data-js 없음) 6초 뒤 CSS만으로 사라진다 */
 .intro {
   position: fixed;
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  pointer-events: none;
   /* 인트로 안의 변화가 바깥 페이지 배치·그리기에 영향을 주지 않게 분리한다 */
   contain: strict;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.intro:not([data-js]) {
+  pointer-events: none;
   animation: intro-out 0.01s linear 6s forwards;
+}
+.intro[data-playing] {
+  pointer-events: none;
+  cursor: default;
 }
 .intro-dim {
   position: absolute;
   inset: 0;
   background: rgb(0 0 0 / 0.4);
 }
+/* 화면을 꽉 채우도록 봉투 비율(750:1333)을 유지한 채 cover 크기로 가운데 정렬 */
 .intro-envelope {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: max(100vw, calc(100dvh * 440 / 720));
-  aspect-ratio: 440 / 720;
+  width: max(100vw, calc(100dvh * 750 / 1333));
+  aspect-ratio: 750 / 1333;
   transform: translate(-50%, -50%);
 }
 .intro-body,
-.intro-flap-paper {
+.intro-flap {
   position: absolute;
   inset: 0;
-  background: url("/images/intro/envelope.webp") center / 100% 100%;
-}
-/* 움직이는 두 조각은 미리 별도 레이어로 올려서, 움직이는 동안 그림자·마스크를 다시 그리지 않게 한다 */
-.intro-body,
-.intro-flap {
+  background: center / 100% 100% no-repeat;
+  /* 움직이는 두 장은 미리 별도 레이어로 올려서 움직이는 동안 다시 그리지 않게 한다 */
   will-change: transform;
   backface-visibility: hidden;
 }
-/* 몸통: 덮개 V자 선 아래쪽. 실링(중심 50%·59.2%, 반지름 61px)은 덮개와 함께 올라가도록 몸통에서 뺀다 */
 .intro-body {
-  clip-path: polygon(0 28.65%, 50% 64.7%, 100% 28.65%, 100% 100%, 0 100%);
-  mask-image: radial-gradient(ellipse 13.9% 8.5% at 50% 59.2%, transparent 97%, #000 100%);
+  background-image: url("/images/intro/envelope-bottom.webp");
 }
-/* 그림자 필터(drop-shadow)는 아이폰 Safari에서 움직이는 동안 다시 그려져 버벅여서 쓰지 않는다 */
+/* 덮개가 몸통 위에 겹친다 (실링은 덮개 이미지에 들어 있다) */
 .intro-flap {
-  position: absolute;
-  inset: 0;
-}
-/* 덮개: 위쪽 전체 + V자 선까지. 선과 정확히 같은 좌표라 이음새가 선 위에 놓인다 */
-.intro-flap-paper {
-  clip-path: polygon(0 0, 100% 0, 100% 28.65%, 50% 64.7%, 0 28.65%);
-}
-.intro-seal {
-  position: absolute;
-  top: 59.2%;
-  left: 50%;
-  width: 34.1%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  background: url("/images/intro/seal.webp") center / 100% 100%;
-  /* 잘라낸 정사각형(150px)에서 실링(지름 122px)만 남긴다 */
-  mask-image: radial-gradient(circle closest-side, #000 79%, transparent 83%);
+  background-image: url("/images/intro/envelope-top.webp");
+  transform-origin: 50% 54%;
 }
 .intro[data-playing] .intro-flap {
-  animation: intro-flap 1.5s cubic-bezier(0.45, 0, 0.55, 1) 0.3s forwards;
+  animation: intro-flap 1.7s cubic-bezier(0.45, 0, 0.55, 1) forwards;
 }
 .intro[data-playing] .intro-body {
-  animation: intro-body 1.05s cubic-bezier(0.55, 0, 0.75, 0.3) 0.55s forwards;
+  animation: intro-body 1.05s cubic-bezier(0.55, 0, 0.75, 0.3) 0.45s forwards;
 }
 .intro[data-playing] .intro-dim {
-  animation: intro-dim 1.8s ease-out 1.3s forwards;
+  animation: intro-dim 1.8s ease-out 1.2s forwards;
 }
 
+/* 처음 0.2초(12%)는 실링을 누른 듯 살짝 작아졌다가, 덮개가 살짝 들린 뒤 위로 빠진다 */
 @keyframes intro-flap {
-  15% {
+  6% {
+    transform: scale(0.985);
+  }
+  12% {
+    transform: none;
+  }
+  24% {
     transform: translate3d(0, -2%, 0);
   }
   100% {

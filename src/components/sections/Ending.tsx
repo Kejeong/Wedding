@@ -131,14 +131,18 @@ function Note({ text, rotate }: { text: string; rotate: number }) {
     <div className="relative h-[116px] w-[246px]" style={{ transform: `rotate(${rotate}deg)` }}>
       <NoteClip />
       <div className="note-paper absolute inset-0 px-4 py-[15px] shadow-note">
-        <p className="font-hand text-base leading-[1.3] whitespace-pre-line text-ink">{text}</p>
+        {/* 손글씨가 가늘어 보여서 글자색 외곽선(0.4px)으로 살짝 굵게 */}
+        <p className="font-hand text-base leading-[1.3] whitespace-pre-line text-ink [-webkit-text-stroke:0.4px_currentColor]">{text}</p>
       </div>
       <NoteClip front />
     </div>
   );
 }
 
-/** 클립(20x44): 위 8px만 종이 밖으로 나오고 오른쪽 끝에서 8px 안쪽, 메모지보다 15° 더 기울어짐 */
+/**
+ * 클립(20x44): 위 8px만 종이 밖으로 나오고 오른쪽 끝에서 12px 안쪽.
+ * 클립 이미지 자체가 10°쯤 기울어 있고 10° 더 돌려서, 아래쪽이 오른쪽으로 20°쯤 비스듬히 꽂힌 모양
+ */
 function NoteClip({ front }: { front?: boolean }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element -- 작은 장식 이미지
@@ -147,7 +151,7 @@ function NoteClip({ front }: { front?: boolean }) {
       alt=""
       width={20}
       height={44}
-      className="pointer-events-none absolute -top-2 right-2 -rotate-15"
+      className="pointer-events-none absolute -top-2 right-3 -rotate-10"
       // 앞 클립은 위 15%(종이 밖 고리)와 오른쪽 75%(안쪽 U자 철사)만 남긴다
       style={front ? { clipPath: "polygon(0 0, 100% 0, 100% 100%, 25% 100%, 25% 15%, 0 15%)" } : undefined}
     />

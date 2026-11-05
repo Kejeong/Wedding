@@ -8,7 +8,8 @@ const cormorant = Cormorant_Garamond({ variable: "--font-cormorant", subsets: ["
 const pinyon = Pinyon_Script({ variable: "--font-pinyon", subsets: ["latin"], weight: "400" });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const adobeFontsKitId = process.env.NEXT_PUBLIC_ADOBE_FONTS_KIT_ID;
+// IvyOra Display · Altesse Std 웹 프로젝트 (Adobe Fonts > 웹 프로젝트에서 이 사이트 도메인을 허용해야 보인다)
+const adobeFontsKitId = process.env.NEXT_PUBLIC_ADOBE_FONTS_KIT_ID || "pew6wbl";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -23,7 +23,8 @@ async function fetchEntries(limit: number): Promise<GuestbookPage> {
 
 function Note({ entry, clamp, onDelete }: { entry: GuestbookEntry; clamp: boolean; onDelete: () => void }) {
   return (
-    <li className={`bg-card relative flex flex-col justify-between p-5 shadow-note ${clamp ? "h-[130px]" : "min-h-[130px]"}`}>
+    // 첫 화면 카드는 종이 질감 50%, 전체보기(팝업) 카드는 20%
+    <li className={`relative flex flex-col justify-between p-5 shadow-note ${clamp ? "bg-card h-[130px]" : "bg-card-light min-h-[130px]"}`}>
       <p className={`pr-5 text-sm leading-normal whitespace-pre-line break-all ${clamp ? "line-clamp-3" : ""}`}>
         {entry.message}
       </p>
@@ -269,10 +270,10 @@ export function Guestbook() {
       </Reveal>
 
       <Reveal className="mt-10 space-y-2.5 px-5">
-        <Button variant="line" onClick={openAll}>
+        <Button variant="line" size="sm" onClick={openAll}>
           전체 보기
         </Button>
-        <Button variant="solid" size="md" onClick={() => setModal({ type: "write" })}>
+        <Button variant="solid" size="sm" onClick={() => setModal({ type: "write" })}>
           메시지 남기기
         </Button>
       </Reveal>
