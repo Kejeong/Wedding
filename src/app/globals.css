@@ -119,10 +119,10 @@ body {
 /* ---------- 첫 진입 인트로 (Intro 컴포넌트) ----------
    봉투 윗면(덮개+실링)과 아랫면(몸통) 이미지 두 장(750x1333, 투명 배경)을 겹쳐 놓는다.
    참고 영상(test.mp4)의 움직임에 맞춘 순서 (봉투·첫 화면 사진·글꼴이 준비되면 JS가 data-playing을 붙인다)
-   0.15s~ 덮개와 몸통이 함께 움직이기 시작한다
+   0.2s~  몸통, 0.3s~ 덮개가 이어서 움직이기 시작한다
           몸통은 점점 빨라지며 0.85초 만에 아래로 빠지고,
           덮개는 빠르게 올라가다 실링이 화면 위쪽에서 천천히 사라지며 1.6초 동안 빠진다
-   1.2s~  어둡던 첫 화면이 1.6초 동안 서서히 밝아지고, 2.9s에 인트로가 사라진다
+   1.2s~  어둡던 첫 화면이 1.6초 동안 서서히 밝아지고, 2.9s에 인트로가 사라진다 (덮개는 1.9s에 다 빠진다)
    JS가 실행되지 않으면(data-js 없음) 6초 뒤 CSS만으로 사라진다 */
 .intro {
   position: fixed;
@@ -173,10 +173,10 @@ body {
   background-image: url("/images/intro/envelope-top.webp");
 }
 .intro[data-playing] .intro-flap {
-  animation: intro-flap 1.6s cubic-bezier(0.55, 0, 0.2, 1) 0.15s forwards;
+  animation: intro-flap 1.6s cubic-bezier(0.6, 0, 0.25, 1) 0.3s forwards;
 }
 .intro[data-playing] .intro-body {
-  animation: intro-body 0.85s cubic-bezier(0.45, 0, 0.8, 0.5) 0.15s forwards;
+  animation: intro-body 0.85s cubic-bezier(0.45, 0, 0.8, 0.5) 0.2s forwards;
 }
 .intro[data-playing] .intro-dim {
   animation: intro-dim 1.6s ease-in-out 1.2s forwards;
