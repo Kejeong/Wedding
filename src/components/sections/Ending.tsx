@@ -133,8 +133,8 @@ function Note({ text, rotate }: { text: string; rotate: number }) {
     <div className="relative h-[116px] w-[246px]" style={{ transform: `rotate(${rotate}deg)` }}>
       <NoteClip />
       <div className="note-paper absolute inset-0 px-4 py-[15px] shadow-note">
-        {/* 손글씨가 가늘어 보여서 글자색 외곽선(0.4px)으로 살짝 굵게 */}
-        <p className="font-hand text-base leading-[1.3] whitespace-pre-line text-ink [-webkit-text-stroke:0.4px_currentColor]">{text}</p>
+        {/* 손글씨가 가늘어 보여서 글자색 외곽선(0.3px)으로 살짝 굵게 */}
+        <p className="font-hand text-base leading-[1.3] whitespace-pre-line text-ink [-webkit-text-stroke:0.3px_currentColor]">{text}</p>
       </div>
       <NoteClip front />
     </div>

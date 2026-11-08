@@ -29,7 +29,7 @@ body {
   @apply font-sans text-ink antialiased;
 }
 
-/* 피그마 자간 -2% (영문 폰트는 -5%): em은 상속 시 px로 굳어버리므로 요소마다 지정해야 글자 크기별로 적용된다.
+/* 피그마 자간 -2% (영문 폰트도 -2%): em은 상속 시 px로 굳어버리므로 요소마다 지정해야 글자 크기별로 적용된다.
    Tailwind preflight가 폼 요소에 letter-spacing: inherit 를 걸어서 폼 요소도 같은 명시도로 다시 덮는다 */
 @layer base {
   *,
@@ -43,11 +43,9 @@ body {
     letter-spacing: var(--letter-spacing, -0.02em);
   }
 
-  /* 영문 폰트(디스플레이·스크립트)는 자간 -5%. 변수로 두면 안쪽 요소들도 같은 값을 물려받는다 */
+  /* 영문 폰트(디스플레이·스크립트)도 자간 -2%. 변수로 두면 안쪽 요소들도 같은 값을 물려받는다 */
   .font-display,
-  .font-script {
-    --letter-spacing: -0.05em;
-  }
+  .font-script,
   .font-sans,
   .font-hand {
     --letter-spacing: -0.02em;

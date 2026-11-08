@@ -9,7 +9,7 @@ const PLACEHOLDER_COUNT = 30;
 export function Gallery() {
   return (
     <section className="mt-30">
-      <SectionTitle title="GALLERY" />
+      <SectionTitle title="GALLERY" spaced={false} />
       <Reveal className="mt-[34px]">
         <GalleryCarousel photos={gallery} placeholderCount={PLACEHOLDER_COUNT} />
       </Reveal>
